@@ -26,6 +26,9 @@ export default function Navbar() {
               <Link href="/menu" className="text-gray-600 hover:text-gray-900 px-3 py-2">
                 Menu
               </Link>
+              <Link href="/orders" className="text-gray-600 hover:text-gray-900 px-3 py-2">
+                Orders
+              </Link>
               {!session ? (
                 <>
                   <Link href="/auth/login" className="text-gray-600 hover:text-gray-900 px-3 py-2">
@@ -77,6 +80,9 @@ export default function Navbar() {
             <Link href="/menu" className="text-gray-600 hover:text-gray-900 block px-3 py-2">
               Menu
             </Link>
+            <Link href="/orders" className="text-gray-600 hover:text-gray-900 block px-3 py-2">
+                Orders
+              </Link>
             {!session ? (
               <>
                 <Link href="/auth/login" className="text-gray-600 hover:text-gray-900 block px-3 py-2">

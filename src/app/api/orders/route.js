@@ -8,9 +8,19 @@ const prisma = new PrismaClient();
 
 const getSessionOrThrow = async () => {
   const session = await getServerSession(authOptions);
+  console.log('Raw Session:', JSON.stringify(session, null, 2));
+  
   if (!session || !session.user) {
+    console.error('No session or user found');
     throw new Error('Unauthorized');
   }
+  
+  // Ensure user ID is present
+  if (!session.user.id) {
+    console.error('User ID is missing from session');
+    throw new Error('User ID is missing');
+  }
+  
   return session;
 };
 
@@ -40,6 +50,9 @@ const handleErrors = (error) => {
 export async function POST(request) {
   try {
     const session = await getSessionOrThrow();
+
+    // Explicitly log session information for debugging
+    console.log('Session User:', session.user);
 
     // Parse the request body
     const { mealIds } = await request.json();
@@ -80,6 +93,11 @@ export async function POST(request) {
 
     // Calculate total price
     const totalPrice = meals.reduce((sum, meal) => sum + meal.price, 0);
+
+    // Ensure we have a valid user ID
+    if (!session.user.id) {
+      return NextResponse.json({ error: 'User ID is missing. Please log in again.' }, { status: 401 });
+    }
 
     // Create the order with OrderItems
     const order = await prisma.order.create({
